@@ -766,6 +766,18 @@ def bindparam(
       This is to allow statement caching to be used in conjunction with
       an IN clause.
 
+      When a :func:`.bindparam` is used inside a
+      :meth:`.ColumnOperators.in_` expression, SQLAlchemy enables the
+      expanding behavior automatically; setting ``expanding=True``
+      explicitly is optional for this use case. For example::
+
+          stmt = select(column("id")).where(
+              column("id").in_(bindparam("ids"))
+          )
+
+      The ``ids`` parameter can receive lists of different lengths
+      without requiring a different compiled statement for each list.
+
       .. seealso::
 
         :meth:`.ColumnOperators.in_`

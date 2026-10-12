@@ -1084,10 +1084,11 @@ class ColumnOperators(OrderingOperators):
           .. versionchanged:: 1.4  empty IN expressions now use an
              execution-time generated SELECT subquery in all cases.
 
-        * A bound parameter, e.g. :func:`.bindparam`, may be used if it
-          includes the :paramref:`.bindparam.expanding` flag::
+        * A bound parameter, e.g. :func:`.bindparam`, may be used with
+          a sequence of values. The ``IN`` operator automatically enables
+          :paramref:`.bindparam.expanding` on the parameter::
 
-            stmt.where(column.in_(bindparam("value", expanding=True)))
+            stmt.where(column.in_(bindparam("value")))
 
           In this calling form, the expression renders a special non-SQL
           placeholder expression that looks like:
@@ -1131,8 +1132,8 @@ class ColumnOperators(OrderingOperators):
             FROM othertable WHERE othertable.x = table.x)
 
         :param other: a list of literals, a :func:`_expression.select`
-         construct, or a :func:`.bindparam` construct that includes the
-         :paramref:`.bindparam.expanding` flag set to True.
+         construct, or a :func:`.bindparam` construct that is
+         automatically configured to expand in this expression.
 
         """  # noqa: E501
         return self.operate(in_op, other)
